@@ -41,7 +41,7 @@ public class EstoqueController {
     public Estoque atualizar(@PathVariable Long id, @RequestBody Estoque novoEstoque) {
         return repository.findById(id).map(estoque -> {
             estoque.setQuantidade(novoEstoque.getQuantidade());
-            // Estoque.setPreco(novoEstoque.getPreco());
+            estoque.setProduto(novoEstoque.getProduto());
             return repository.save(estoque);
         }).orElse(null);
     }

@@ -41,7 +41,7 @@ public class FornecedorController {
     public Fornecedor atualizar(@PathVariable Long id, @RequestBody Fornecedor novoFornecedor) {
         return repository.findById(id).map(fornecedor -> {
             fornecedor.setNome(novoFornecedor.getNome());
-            // Fornecedor.setPreco(novoFornecedor.getPreco());
+            fornecedor.setProdutos(novoFornecedor.getProdutos());
             return repository.save(fornecedor);
         }).orElse(null);
     }

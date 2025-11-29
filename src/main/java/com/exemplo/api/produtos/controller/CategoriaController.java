@@ -38,10 +38,10 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public Categoria atualizar(@PathVariable Long id, @RequestBody Categoria novoCategoria) {
+    public Categoria atualizar(@PathVariable Long id, @RequestBody Categoria novaCategoria) {
         return repository.findById(id).map(categoria -> {
-            categoria.setNome(novoCategoria.getNome());
-            // categoria.setProdutos(List<Produtos> produtos);
+            categoria.setNome(novaCategoria.getNome());
+            categoria.setProdutos(novaCategoria.getProdutos());
             return repository.save(categoria);
         }).orElse(null);
     }
