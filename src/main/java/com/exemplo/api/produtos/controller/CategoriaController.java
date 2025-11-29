@@ -1,53 +1,71 @@
 package com.exemplo.api.produtos.controller;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
 import com.exemplo.api.produtos.model.Categoria;
 import com.exemplo.api.produtos.repository.CategoriaRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("/categoria")
+@RequestMapping("/api/categorias")
+@RequiredArgsConstructor
 public class CategoriaController {
-    private final CategoriaRepository repository;
 
-    public CategoriaController(CategoriaRepository repository) {
-        this.repository = repository;
-    }
+    private final CategoriaRepository categoriaRepository;
 
-    @PostMapping
-    public Categoria criar(@RequestBody Categoria categoria) {
-        return repository.save(categoria);
-    }
-
+    // GET /api/categorias
     @GetMapping
-    public List<Categoria> listar() {
-        return repository.findAll();
+    public List<Categoria> getAllCategorias() {
+        // Retorna todas as categorias do banco de dados
+        return categoriaRepository.findAll();
     }
 
+    // GET /api/categorias/{id}
     @GetMapping("/{id}")
-    public Categoria buscar(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
+        // Busca a categoria pelo ID. Usa Optional para retornar 404 se não encontrar.
+        return categoriaRepository.findById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
+    // POST /api/categorias
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) // Retorna código 201 (Created)
+    public Categoria createCategoria(@RequestBody Categoria categoria) {
+        // Salva uma nova categoria no banco de dados
+        return categoriaRepository.save(categoria);
+    }
+
+    // PUT /api/categorias/{id}
     @PutMapping("/{id}")
-    public Categoria atualizar(@PathVariable Long id, @RequestBody Categoria novaCategoria) {
-        return repository.findById(id).map(categoria -> {
-            categoria.setNome(novaCategoria.getNome());
-            categoria.setProdutos(novaCategoria.getProdutos());
-            return repository.save(categoria);
-        }).orElse(null);
+    public ResponseEntity<Categoria> updateCategoria(
+            @PathVariable Long id, @RequestBody Categoria categoriaDetails) {
+
+        // Tenta encontrar a categoria existente
+        return categoriaRepository.findById(id)
+            .map(categoria -> {
+                // Atualiza somente os dados da categoria encontrada
+                categoria.setNome(categoriaDetails.getNome());
+                Categoria updatedCategoria = categoriaRepository.save(categoria);
+                return ResponseEntity.ok(updatedCategoria);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
+    // DELETE /api/categorias/{id}
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
+        // Tenta encontrar e deletar
+        if (!categoriaRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        categoriaRepository.deleteById(id);
+        return ResponseEntity.noContent().build(); // Retorna código 204 (No Content)
     }
 }
