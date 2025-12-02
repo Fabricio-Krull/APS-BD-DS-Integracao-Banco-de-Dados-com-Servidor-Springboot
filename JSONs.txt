@@ -1,10 +1,10 @@
 Produtos
 
 {
-  "id": 1,
   "nome": "Honda Civic 2.0 Flex",
   "preco": 145000,
   "categoria": { "id": 1 },
+  "estoque": { "quantidade": 15 },
   "fornecedores": [
     { "id": 1 },
     { "id": 2 }
@@ -12,10 +12,10 @@ Produtos
 }
 
 {
-  "id": 2,
   "nome": "Notebook Dell Inspiron 15",
   "preco": 4200,
   "categoria": { "id": 2 },
+  "estoque": { "quantidade": 45 },
   "fornecedores": [
     { "id": 3 }
   ]
@@ -24,31 +24,29 @@ Produtos
 
 Categorias
 
-{ "id": 1, "nome": "Automotivos" }
+{ "nome": "Automotivos" }
 
-{ "id": 2, "nome": "Eletrônicos" }
+{ "nome": "Eletrônicos" }
 
 
 Fornecedores
 
-{ "id": 1, "nome": "Auto Motors Brasil" }
+{ "nome": "Auto Motors Brasil" }
 
-{ "id": 2, "nome": "Distribuidora Veículos SP" }
+{ "nome": "Distribuidora Veículos SP" }
 
-{ "id": 3, "nome": "Tech Distribuidora" }
+{ "nome": "Tech Distribuidora" }
 
 
 Cliente
 
 {
-  "id": 1,
   "nome": "Maria Oliveira",
   "email": "maria.oliveira@example.com",
   "dataNascimento": "1985-03-22"
 }
 
 {
-  "id": 2,
   "nome": "João Silva",
   "email": "joao.silva@example.com",
   "dataNascimento": "1992-11-10"
