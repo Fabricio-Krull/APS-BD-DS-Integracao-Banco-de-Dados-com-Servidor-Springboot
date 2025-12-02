@@ -1,17 +1,42 @@
 package com.exemplo.api.produtos.model;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_usuario")
-public class Usuario {
+@Table(name = "tb_cliente")
+public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String email;
     private String dataNascimento;
-    private int pontuacao;
+
+    @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
+    private List<Venda> compras;
+    
+    public List<Venda> getCompras() {
+        return compras;
+    }
+
+    public void setCompras(List<Venda> compras) {
+        this.compras = compras;
+    }
+
+    public Cliente() {}
+    
+    public Cliente (String nome) {
+        this.nome = nome;
+    }
 
     public String getDataNascimento() {
         return dataNascimento;
@@ -19,12 +44,6 @@ public class Usuario {
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
-    }
-
-    public Usuario() {}
-
-    public Usuario (String nome) {
-        this.nome = nome;
     }
 
     public Long getId() {
@@ -49,14 +68,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getPontuacao() {
-        return pontuacao;
-    }
-
-    public void setPontuacao(int pontuacao) {
-        this.pontuacao = pontuacao;
     }
 
 }

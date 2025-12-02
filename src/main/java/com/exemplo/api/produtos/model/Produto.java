@@ -3,7 +3,10 @@
 
 package com.exemplo.api.produtos.model;
 
-import java.util.Set;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -19,8 +22,10 @@ public class Produto {
     @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Estoque estoque;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id", nullable = false)
+    @JsonIgnoreProperties("produtos") // Exibe a categoria, sem retornar o campo Categoria.produtos
     private Categoria categoria;
 
     @ManyToMany
@@ -29,7 +34,13 @@ public class Produto {
         joinColumns = @JoinColumn(name = "produto_id"),
         inverseJoinColumns = @JoinColumn(name = "fornecedor_id")
     )
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // Usado para
+    // exibir o id e nome dos fornecedores, sem causar um loop Produto.Fornecedor -> Fornecedor.Produtos -> ...
     private Set<Fornecedor> fornecedores;
+
+    @OneToMany(mappedBy = "produto")
+    @JsonIgnore
+    private List<ItemVenda> itensVenda;
 
     public Produto() {}
 
@@ -77,11 +88,23 @@ public class Produto {
         this.categoria = categoria;
     }
 
+
     public Set<Fornecedor> getFornecedores() {
         return fornecedores;
     }
     public void setFornecedores(Set<Fornecedor> fornecedores) {
         this.fornecedores = fornecedores;
     }
+
+    
+    public List<ItemVenda> getItensVenda() {
+        return itensVenda;
+    }
+    public void setItensVenda(List<ItemVenda> itensVenda) {
+        this.itensVenda = itensVenda;
+    }
+
+
+
 
 }

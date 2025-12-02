@@ -3,6 +3,8 @@ package com.exemplo.api.produtos.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.*;
+
 @Entity
 @Table(name = "tb_categorias")
 public class Categoria {
@@ -16,6 +18,8 @@ public class Categoria {
     // --- Relacionamento 1:N (One-to-Many) ---
     // É o lado '1' do relacionamento. 'mappedBy' aponta para o campo em Produto.
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("categoria")
+    @JsonIgnore
     private List<Produto> produtos;
 
     // Construtores, Getters e Setters...

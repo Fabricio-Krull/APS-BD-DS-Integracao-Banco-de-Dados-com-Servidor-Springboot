@@ -1,19 +1,30 @@
 package com.exemplo.api.produtos.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.exemplo.api.produtos.model.Fornecedor;
 import com.exemplo.api.produtos.model.Produto;
+import com.exemplo.api.produtos.repository.CategoriaRepository;
+import com.exemplo.api.produtos.repository.FornecedorRepository;
 import com.exemplo.api.produtos.repository.ProdutoRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import com.exemplo.api.produtos.repository.CategoriaRepository;
-import com.exemplo.api.produtos.repository.FornecedorRepository;
-
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 @RequiredArgsConstructor
 public class ProdutoController {
 
@@ -37,19 +48,27 @@ public class ProdutoController {
 
     // POST /api/produtos
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    // @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Produto> createProduto(@RequestBody Produto produto){
 
         if (produto.getCategoria() == null || produto.getCategoria().getId() == null) return ResponseEntity.badRequest().build();
 
         categoriaRepository.findById(produto.getCategoria().getId()).ifPresent(produto::setCategoria);
 
-        if (produto.getFornecedores() != null && !produto.getFornecedores().isEmpty()){
-            produto.getFornecedores().clear();
+        if (produto.getFornecedores() != null && !produto.getFornecedores().isEmpty()) {
 
-            produto.getFornecedores().forEach(fornecedor -> {
-                fornecedorRepository.findById(fornecedor.getId()).ifPresent(produto.getFornecedores()::add);
-            });
+            List<Fornecedor> fornecedores = new ArrayList<>();
+
+            for (Fornecedor f : produto.getFornecedores()) {
+                fornecedorRepository.findById(f.getId())
+                    .ifPresent(fornecedores::add);
+            }
+
+            produto.setFornecedores(new HashSet<>(fornecedores));
+        }
+
+        if (produto.getEstoque() != null) {
+            produto.getEstoque().setProduto(produto);
         }
 
         Produto savedProduto = produtoRepository.save(produto);

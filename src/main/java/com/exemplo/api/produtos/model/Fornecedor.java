@@ -1,6 +1,7 @@
 package com.exemplo.api.produtos.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.*;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,9 @@ public class Fornecedor {
     // Mapeamento: Lado inverso do relacionamento em Produto.
     // 'mappedBy' indica que o mapeamento da tabela de junção está na classe Produto.
     @ManyToMany(mappedBy = "fornecedores")
+    @JsonIgnore
     private Set<Produto> produtos;
+
 
     // Construtores, Getters e Setters...
     public Fornecedor() {}

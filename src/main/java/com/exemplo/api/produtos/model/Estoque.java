@@ -1,5 +1,8 @@
 package com.exemplo.api.produtos.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,9 +17,11 @@ public class Estoque {
 
     // --- Relacionamento 1:1 (One-to-One) ---
     // É o lado "proprietário" (o que contém a chave estrangeira (FK).
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id", nullable = false) // Define a FK na tabela tb_estoques.
+    @OneToOne
+    @JoinColumn(name = "produto_id", nullable = false)
+    @JsonBackReference
     private Produto produto;
+
 
     // Construtores, Getters e Setters...
     public Estoque() {}

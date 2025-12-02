@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.exemplo.api.produtos.model.Categoria;
 import com.exemplo.api.produtos.repository.CategoriaRepository;
+import com.exemplo.api.produtos.repository.ClienteRepository;
+import com.exemplo.api.produtos.repository.ProdutoRepository;
+import com.exemplo.api.produtos.repository.VendaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +19,10 @@ import lombok.RequiredArgsConstructor;
 public class CategoriaController {
 
     private final CategoriaRepository categoriaRepository;
+
+    public CategoriaController(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
 
     // GET /api/categorias
     @GetMapping

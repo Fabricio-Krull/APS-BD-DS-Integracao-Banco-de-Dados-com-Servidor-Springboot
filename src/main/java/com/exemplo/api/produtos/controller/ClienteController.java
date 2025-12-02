@@ -4,6 +4,7 @@
 package com.exemplo.api.produtos.controller;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,35 +14,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.exemplo.api.produtos.model.Usuario;
-import com.exemplo.api.produtos.repository.UsuarioRepository;
+import com.exemplo.api.produtos.model.Cliente;
+import com.exemplo.api.produtos.repository.ClienteRepository;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
-    private final UsuarioRepository repository;
+@RequestMapping("/api/clientes")
+public class ClienteController {
+    private final ClienteRepository repository;
 
-    public UsuarioController(UsuarioRepository repository) {
+    public ClienteController(ClienteRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping("/{id}")
-    public Usuario buscar(@PathVariable Long id) {
+    public Cliente buscar(@PathVariable Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @GetMapping("")
-    public List<Usuario> listar(){
+    public List<Cliente> listar(){
         return repository.findAll();
     }
 
     @PostMapping
-    public Usuario criar(@RequestBody Usuario usuario) {
+    public Cliente criar(@RequestBody Cliente usuario) {
         return repository.save(usuario);
     }
 
     @PatchMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario novoUsuario) {
+    public Cliente atualizar(@PathVariable Long id, @RequestBody Cliente novoUsuario) {
         return repository.findById(id).map(usuario -> {
             if(novoUsuario.getNome() != null && !novoUsuario.getNome().isBlank() && !(novoUsuario.getNome().equals(usuario.getNome()))){
                 usuario.setNome(novoUsuario.getNome());
@@ -53,10 +54,6 @@ public class UsuarioController {
 
             if(novoUsuario.getDataNascimento() != null && !novoUsuario.getDataNascimento().isBlank() && !(novoUsuario.getDataNascimento().equals(usuario.getDataNascimento()))){
                 usuario.setDataNascimento(novoUsuario.getDataNascimento());
-            }
-
-            if(!(novoUsuario.getPontuacao() == usuario.getPontuacao())){
-                usuario.setPontuacao(novoUsuario.getPontuacao());
             }
 
             return repository.save(usuario);
