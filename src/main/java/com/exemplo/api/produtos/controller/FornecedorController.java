@@ -6,16 +6,18 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.exemplo.api.produtos.model.Fornecedor;
+import com.exemplo.api.produtos.repository.CategoriaRepository;
 import com.exemplo.api.produtos.repository.FornecedorRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/fornecedores")
-@RequiredArgsConstructor
 public class FornecedorController {
 
     private final FornecedorRepository fornecedorRepository;
+
+    public FornecedorController(FornecedorRepository fornecedorRepository) {
+        this.fornecedorRepository = fornecedorRepository;
+    }
 
     @GetMapping
     public List<Fornecedor> getAllFornecedores() {
