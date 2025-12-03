@@ -11,11 +11,9 @@ import com.exemplo.api.produtos.repository.ClienteRepository;
 import com.exemplo.api.produtos.repository.ProdutoRepository;
 import com.exemplo.api.produtos.repository.VendaRepository;
 
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/categorias")
-@RequiredArgsConstructor
 public class CategoriaController {
 
     private final CategoriaRepository categoriaRepository;
